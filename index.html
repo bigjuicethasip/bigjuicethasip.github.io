@@ -18,7 +18,7 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
-            transition: opacity 1s ease-out; /* Transition for fade-out effect */
+            transition: opacity 1s ease-out;
         }
 
         .glitch {
@@ -26,7 +26,7 @@
             font-weight: bold;
             position: relative;
             animation: glitch 1s linear infinite, rgb-animation 3s infinite;
-            background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+            background: rgba(0, 0, 0, 0.7); 
             padding: 10px;
             border-radius: 10px;
         }
@@ -94,7 +94,7 @@
             animation: side-to-side 10s linear infinite;
             position: absolute;
             top: 4em;
-            background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+            background: rgba(0, 0, 0, 0.7); 
             padding: 10px;
             border-radius: 10px;
         }
@@ -107,8 +107,8 @@
         .background-text-quote {
             font-size: 1.2em;
             color: rgba(255, 255, 255, 0.75); /* Text color with 75% opacity */
-            text-shadow: 0 0 50px rgba(255, 255, 0, 0.75); /* More prominent yellow-ish glow with 75% opacity */
-            background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+            text-shadow: 0 0 50px rgba(255, 255, 0, 0.75);
+            background: rgba(0, 0, 0, 0.7);
             padding: 10px;
             border-radius: 10px;
             position: absolute;
@@ -242,10 +242,10 @@
         });
 
         document.getElementById('typewriterButton').addEventListener('click', function() {
-            document.body.style.opacity = 0; // Start fade-out animation
+            document.body.style.opacity = 0;
             setTimeout(() => {
-                window.location.href = 'second-page.html'; // Redirect to the second page after the fade-out
-            }, 1000); // Duration should match the CSS transition duration
+                window.location.href = 'second-page.html'; 
+            }, 1000);
         });
     </script>
 </body>
