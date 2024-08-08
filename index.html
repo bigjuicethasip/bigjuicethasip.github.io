@@ -183,6 +183,25 @@
             object-fit: cover;
             z-index: -1;
         }
+
+        .forums-button {
+            margin-top: 1em;
+            padding: 1em 2em;
+            font-size: 1.5em;
+            color: #fff;
+            background: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            font-family: monospace;
+            outline: none;
+        }
+
+        .forums-button:hover {
+            background-color: #555;
+        }
     </style>
 </head>
 <body>
@@ -208,6 +227,9 @@
     <button class="typewriter-button" id="typewriterButton">
         <span>ENTER</span>
     </button>
+
+    <!-- BJTS FORUMS Button -->
+    <button class="forums-button" onclick="location.href='fourth-page.html'">BJTS FORUMS</button>
 
     <script>
         const numFlakes = 100;
