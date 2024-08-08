@@ -114,6 +114,37 @@
         .modal-content button:hover {
             background: #777;
         }
+
+        /* Glowing Button */
+        .glow-button {
+            margin-top: 2em;
+            padding: 1em 2em;
+            font-size: 1.5em;
+            color: #fff;
+            background: #f00; /* Red background */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            font-family: monospace;
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.75); /* Glowing effect */
+            transition: box-shadow 0.3s ease;
+        }
+
+        .glow-button:hover {
+            animation: shake 0.5s;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 1); /* Enhanced glow on hover */
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
     </style>
 </head>
 <body>
@@ -153,6 +184,8 @@
             </tbody>
         </table>
     </div>
+
+    <button class="glow-button" onclick="window.location.href='third-page.html'">Hall of Fame</button>
 
     <div id="warningModal" class="modal">
         <div class="modal-content">

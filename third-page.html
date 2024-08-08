@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hall of Fame</title>
+    <style>
+        body {
+            margin: 0;
+            background: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 2.5em;
+            color: #ffa500; /* Alexandria gold color */
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .name {
+            font-size: 3em;
+            color: #fff;
+            margin: 1em 0;
+        }
+
+        .image-container img {
+            max-width: 50%; /* Adjusted size to be smaller */
+            height: auto;
+            border-radius: 10px;
+            border: 3px solid #ffa500; /* Alexandria gold border */
+        }
+
+        .reason {
+            margin-top: 1em;
+            font-size: 1.2em;
+            color: #fff;
+            max-width: 80%;
+        }
+
+        .applause-button {
+            margin-top: 1em;
+            padding: 0.75em 1.5em;
+            font-size: 1.2em;
+            color: #fff;
+            background: #ff4500; /* Orange color for the button */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .applause-button:hover {
+            background: #ff6700; /* Slightly lighter orange */
+        }
+
+        .gif-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allow clicks to pass through */
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999; /* Ensure it appears above other content */
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        .gif-container img {
+            width: 63px; /* Increased size by approximately 5% */
+            height: 63px;
+            position: absolute;
+            animation: flyUp 5s forwards;
+        }
+
+        @keyframes flyUp {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Hall Of Fame Inductee's</h1>
+
+    <div class="content">
+        <div class="name">Leigh</div>
+        <div class="image-container">
+            <img src="https://scontent.fgla3-1.fna.fbcdn.net/v/t39.30808-6/342976553_591397549719041_669264273890037457_n.jpg?stp=cp6_dst-jpg&_nc_cat=101&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=sQ7Qb70fzwsQ7kNvgGUMsRQ&_nc_ht=scontent.fgla3-1.fna&oh=00_AYBVMxSZUGzuH7DO6kE8ZJC3eVsA217APNNlNzwhirF9cQ&oe=66BAAA98" alt="Leigh">
+        </div>
+        <div class="reason">
+            Reason For Induction: Being such a keyboard warrior it puts Facebook mums to shame, Round of Applause for Leigh Everyone!
+        </div>
+        <button class="applause-button" onclick="giveApplause()">Give Applause</button>
+    </div>
+
+    <div id="gifContainer" class="gif-container"></div>
+
+    <script>
+        function giveApplause() {
+            const gifContainer = document.getElementById('gifContainer');
+            gifContainer.innerHTML = ''; // Clear previous GIFs
+
+            // Create multiple GIF elements
+            for (let i = 0; i < 10; i++) {
+                const gif = document.createElement('img');
+                gif.src = 'https://media4.giphy.com/media/ZdNlmHHr7czumQPvNE/giphy.gif?cid=6c09b9527ldi2owwqq1g7zl1yut0ody3ynjt86s51bcf6pzr&ep=v1_stickers_related&rid=giphy.gif&ct=e';
+                gif.style.top = `${Math.random() * 100}vh`;
+                gif.style.left = `${Math.random() * 100}vw`;
+                gif.style.transform = `translate(-50%, -50%)`;
+                gifContainer.appendChild(gif);
+            }
+
+            // After 5 seconds, the GIFs will start flying up
+            setTimeout(() => {
+                const gifs = gifContainer.querySelectorAll('img');
+                gifs.forEach(gif => {
+                    gif.style.animation = 'flyUp 5s forwards';
+                });
+            }, 100); // Slight delay to ensure GIFs are visible before animation starts
+        }
+    </script>
+</body>
+</html>
