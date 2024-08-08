@@ -14,21 +14,50 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             text-align: center;
-            overflow: hidden; /* Prevent scrollbars */
+            position: relative;
+            overflow-y: auto;
         }
 
         h1 {
             margin-top: 0;
             font-size: 2.5em;
-            color: #ffa500; /* Alexandria gold color */
+            color: #ffa500;
+        }
+
+        .subtext {
+            font-size: 1.5em;
+            color: #ff0000; /* Red color */
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.8),
+                0 0 20px rgba(255, 0, 0, 0.6),
+                0 0 30px rgba(255, 0, 0, 0.4),
+                0 0 40px rgba(255, 0, 0, 0.3);
+            margin-bottom: 2em;
+            animation: pulse 2s infinite; /* Apply the pulse animation */
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .content {
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
 
         .name {
@@ -38,10 +67,10 @@
         }
 
         .image-container img {
-            max-width: 50%; /* Adjusted size to be smaller */
+            max-width: 50%;
             height: auto;
             border-radius: 10px;
-            border: 3px solid #ffa500; /* Alexandria gold border */
+            border: 3px solid #ffa500;
         }
 
         .reason {
@@ -52,57 +81,108 @@
         }
 
         .applause-button {
-            margin-top: 1em;
-            padding: 0.75em 1.5em;
-            font-size: 1.2em;
+            margin-top: 2em;
+            padding: 1em 2em;
+            font-size: 1.5em;
             color: #fff;
-            background: #ff4500; /* Orange color for the button */
+            background: #555;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-family: monospace;
+            outline: none;
         }
 
         .applause-button:hover {
-            background: #ff6700; /* Slightly lighter orange */
+            background: #777;
         }
 
-        .gif-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Allow clicks to pass through */
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999; /* Ensure it appears above other content */
-            overflow: hidden; /* Prevent scrollbars */
-        }
-
-        .gif-container img {
-            width: 63px; /* Increased size by approximately 5% */
-            height: 63px;
+        .applause-gif {
             position: absolute;
-            animation: flyUp 5s forwards;
+            width: 100px;
+            height: 100px;
+            background: url('https://media4.giphy.com/media/ZdNlmHHr7czumQPvNE/giphy.gif?cid=6c09b9527ldi2owwqq1g7zl1yut0ody3ynjt86s51bcf6pzr&ep=v1_stickers_related&rid=giphy.gif&ct=e') no-repeat center center;
+            background-size: cover;
+            border-radius: 50%;
+            opacity: 0;
+            animation: fadeIn 1s forwards, flyAway 1s 5s forwards;
         }
 
-        @keyframes flyUp {
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes flyAway {
             0% {
                 transform: translateY(0);
                 opacity: 1;
             }
             100% {
-                transform: translateY(-100vh);
+                transform: translateY(-120vh);
                 opacity: 0;
             }
+        }
+
+        .cayden-section {
+            margin-top: 3em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .cayden-name {
+            font-size: 4em;
+            color: #fff;
+            position: relative;
+            margin: 1em 0;
+            text-shadow: 
+                0 0 24px rgba(255, 255, 0, 0.8),
+                0 0 36px rgba(255, 255, 0, 0.6),
+                0 0 48px rgba(255, 255, 0, 0.4),
+                0 0 60px rgba(255, 255, 0, 0.3);
+        }
+
+        .cayden-image-container img {
+            max-width: 80%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 1em;
+        }
+
+        .cayden-description {
+            font-size: 1.2em;
+            color: #fff;
+            margin-top: 1em;
+            max-width: 80%;
+        }
+
+        .applause-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
         }
     </style>
 </head>
 <body>
     <h1>Hall Of Fame Inductee's</h1>
+    <div class="subtext">
+        In good memory of Jessica, you will be forever missed on Discord
+    </div>
 
     <div class="content">
         <div class="name">Leigh</div>
@@ -112,33 +192,59 @@
         <div class="reason">
             Reason For Induction: Being such a keyboard warrior it puts Facebook mums to shame, Round of Applause for Leigh Everyone!
         </div>
-        <button class="applause-button" onclick="giveApplause()">Give Applause</button>
+
+        <button class="applause-button" onclick="playApplause('leigh')">Give Applause</button>
+
+        <!-- Applause GIFs container -->
+        <div class="applause-container" id="applauseContainerLeigh"></div>
     </div>
 
-    <div id="gifContainer" class="gif-container"></div>
+    <!-- Cayden's Section -->
+    <div class="cayden-section">
+        <div class="cayden-name">Cayden</div>
+        <div class="cayden-image-container">
+            <img src="https://cdn.discordapp.com/attachments/1267152191848710236/1271114785966260264/IMG_2251.jpg?ex=66b62965&is=66b4d7e5&hm=dd0614f20a4baf2342f1167a436c8e011ddb928c7bdb54ae3c3fbcd8bf4552dc&" alt="Cayden">
+        </div>
+        <div class="cayden-description">
+            Good Guy from what I know, good friend of Jessica 💔
+        </div>
+        
+        <button class="applause-button" onclick="playApplause('cayden')">Give Applause</button>
+
+        <!-- Applause GIFs container -->
+        <div class="applause-container" id="applauseContainerCayden"></div>
+    </div>
 
     <script>
-        function giveApplause() {
-            const gifContainer = document.getElementById('gifContainer');
-            gifContainer.innerHTML = ''; // Clear previous GIFs
+        function playApplause(section) {
+            const container = document.getElementById('applauseContainer' + (section === 'leigh' ? 'Leigh' : 'Cayden'));
 
-            // Create multiple GIF elements
+            // Clear existing GIFs
+            container.innerHTML = '';
+
+            // Create and add new applause GIFs
             for (let i = 0; i < 10; i++) {
-                const gif = document.createElement('img');
-                gif.src = 'https://media4.giphy.com/media/ZdNlmHHr7czumQPvNE/giphy.gif?cid=6c09b9527ldi2owwqq1g7zl1yut0ody3ynjt86s51bcf6pzr&ep=v1_stickers_related&rid=giphy.gif&ct=e';
-                gif.style.top = `${Math.random() * 100}vh`;
-                gif.style.left = `${Math.random() * 100}vw`;
-                gif.style.transform = `translate(-50%, -50%)`;
-                gifContainer.appendChild(gif);
+                const gif = document.createElement('div');
+                gif.classList.add('applause-gif');
+                // Set random position within the container
+                const x = Math.random() * (window.innerWidth - 100) + 'px';
+                const y = Math.random() * (window.innerHeight - 100) + 'px';
+                gif.style.left = x;
+                gif.style.top = y;
+                container.appendChild(gif);
             }
 
-            // After 5 seconds, the GIFs will start flying up
+            // Ensure GIFs fly away after 5 seconds
             setTimeout(() => {
-                const gifs = gifContainer.querySelectorAll('img');
+                const gifs = document.querySelectorAll('.applause-container .applause-gif');
                 gifs.forEach(gif => {
-                    gif.style.animation = 'flyUp 5s forwards';
+                    gif.style.animation = 'fadeIn 1s forwards, flyAway 1s 5s forwards';
                 });
-            }, 100); // Slight delay to ensure GIFs are visible before animation starts
+
+                setTimeout(() => {
+                    container.innerHTML = ''; // Clear GIFs
+                }, 1000); // Wait for flyAway animation to complete
+            }, 5000); // 5 seconds before starting the flyAway animation
         }
     </script>
 </body>
