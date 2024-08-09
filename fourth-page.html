@@ -3,243 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BJTS Forums</title>
+    <title>BJTS FORUMS</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            background: #1e1e1e;
+            background-color: #121212;
             color: #ffffff;
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: flex-start;
             min-height: 100vh;
         }
 
-        .forum-container {
-            width: 80%;
-            max-width: 1200px;
-            margin-top: 20px;
-            padding: 20px;
-            background: #2c2c2c;
-            border-radius: 10px;
-        }
-
         h1 {
-            text-align: center;
-            margin-bottom: 20px;
+            margin-top: 20px;
+            font-size: 2.5em;
         }
 
-        .forum-thread {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #3a3a3a;
-            border-radius: 5px;
-            transition: background 0.3s ease;
+        #forum-post-form {
+            display: flex;
+            flex-direction: column;
+            width: 80%;
+            max-width: 600px;
+            margin-top: 20px;
         }
 
-        .forum-thread:hover {
-            background: #4a4a4a;
-        }
-
-        .forum-thread h2 {
-            margin: 0;
-        }
-
-        .forum-thread p {
-            margin: 5px 0 0 0;
-        }
-
-        .forum-thread img {
-            max-width: 100%;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-
-        .new-thread {
-            margin-top: 30px;
-            padding: 15px;
-            background: #4a4a4a;
-            border-radius: 5px;
-        }
-
-        .new-thread input,
-        .new-thread textarea {
-            width: 100%;
+        input, textarea, button {
             padding: 10px;
             margin: 10px 0;
-            border: none;
+            border: 1px solid #333;
             border-radius: 5px;
-            background: #3a3a3a;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-        }
-
-        .new-thread button {
-            padding: 10px 20px;
-            background: #ffa500;
-            color: #1e1e1e;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .new-thread button:hover {
-            background: #ff8c00;
-        }
-
-        .new-thread input[type="file"] {
-            padding: 0;
-            color: #ffffff;
-        }
-
-        .no-threads {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: #999;
-        }
-
-        .error {
-            color: red;
             font-size: 1em;
-            margin-top: 10px;
+            background: #333;
+            color: #fff;
+        }
+
+        #posts {
+            width: 80%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .post {
+            background: #222;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            word-wrap: break-word;
+        }
+
+        .username {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .post-content {
+            margin-bottom: 5px;
+        }
+
+        .timestamp {
+            font-size: 0.8em;
+            color: #aaa;
+        }
+
+        .post img {
+            max-width: 100%;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="forum-container">
-        <h1>BJTS Forums</h1>
+    <h1>BJTS FORUMS</h1>
+    
+    <form id="forum-post-form">
+        <input type="text" id="username" placeholder="Username" required>
+        <textarea id="postContent" placeholder="Write your post here..." required></textarea>
+        <input type="file" id="fileUpload" accept="image/*">
+        <button type="submit">Post</button>
+    </form>
 
-        <div id="threads">
-            <div class="no-threads">No threads yet. Be the first to post!</div>
-        </div>
+    <div id="posts"></div>
 
-        <div class="new-thread">
-            <h2>Create a New Thread</h2>
-            <input type="text" id="username" placeholder="Username">
-            <input type="text" id="thread-title" placeholder="Thread Title">
-            <textarea id="thread-content" rows="4" placeholder="What do you want to discuss?"></textarea>
-            <input type="file" id="thread-file">
-            <button id="post-thread">Post Thread</button>
-            <div id="error-message" class="error"></div>
-        </div>
-    </div>
+    <!-- Firebase Scripts -->
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+      import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+      import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
 
-    <script>
-        // Function to load threads from localStorage
-        function loadThreads() {
-            const threadsContainer = document.getElementById('threads');
-            const storedThreads = JSON.parse(localStorage.getItem('threads')) || [];
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCHRLMIQz-rMrtSZLxOdprzcg2ppW5VPsg",
+        authDomain: "bjtsf0rums.firebaseapp.com",
+        projectId: "bjtsf0rums",
+        storageBucket: "bjtsf0rums.appspot.com",
+        messagingSenderId: "399870406483",
+        appId: "1:399870406483:web:6f3c45748b1db653f17ba6",
+        measurementId: "G-3HNL3RHBWH"
+      };
 
-            if (storedThreads.length > 0) {
-                document.querySelector('.no-threads').style.display = 'none';
-                storedThreads.forEach(thread => {
-                    const newThread = document.createElement('div');
-                    newThread.className = 'forum-thread';
-                    newThread.innerHTML = `<h2>${thread.title}</h2><p>${thread.content}</p>`;
-                    
-                    // Check if the thread has an attached image
-                    if (thread.file) {
-                        const threadImage = document.createElement('img');
-                        threadImage.src = thread.file;
-                        newThread.appendChild(threadImage);
-                    }
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const storage = getStorage(app);
 
-                    threadsContainer.appendChild(newThread);
-                });
-            }
+      // Reference to the "posts" collection
+      const postsRef = collection(db, "posts");
+
+      // Function to post a new message
+      async function postMessage(username, content, file) {
+        let fileURL = null;
+        
+        if (file) {
+          const storageRef = ref(storage, 'uploads/' + Date.now() + '_' + file.name);
+          await uploadBytes(storageRef, file);
+          fileURL = await getDownloadURL(storageRef);
         }
 
-        // Function to save threads to localStorage
-        function saveThread(username, title, content, file) {
-            const storedThreads = JSON.parse(localStorage.getItem('threads')) || [];
-            storedThreads.push({ username, title, content, file });
-            localStorage.setItem('threads', JSON.stringify(storedThreads));
-        }
-
-        // Function to get taken usernames from localStorage
-        function getTakenUsernames() {
-            const storedThreads = JSON.parse(localStorage.getItem('threads')) || [];
-            return new Set(storedThreads.map(thread => thread.username));
-        }
-
-        document.getElementById('post-thread').addEventListener('click', function() {
-            const username = document.getElementById('username').value.trim();
-            const title = document.getElementById('thread-title').value.trim();
-            const content = document.getElementById('thread-content').value.trim();
-            const fileInput = document.getElementById('thread-file');
-            let fileData = null;
-            const errorMessage = document.getElementById('error-message');
-
-            // Clear previous error message
-            errorMessage.textContent = '';
-
-            // Validate username
-            if (!username || !/^[\w\s]+$/.test(username)) {
-                errorMessage.textContent = 'Please enter a valid username (letters, numbers, and spaces only).';
-                return;
-            }
-
-            // Check if username is taken
-            const takenUsernames = getTakenUsernames();
-            if (takenUsernames.has(username)) {
-                errorMessage.textContent = 'Username is already taken. Please choose another.';
-                return;
-            }
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    fileData = e.target.result;
-                    saveThreadAndReload(username, title, content, fileData);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                saveThreadAndReload(username, title, content, null);
-            }
+        await addDoc(postsRef, {
+          username: username,
+          content: content,
+          timestamp: new Date(),
+          fileURL: fileURL
         });
+      }
 
-        function saveThreadAndReload(username, title, content, fileData) {
-            if (title && content) {
-                const threadsContainer = document.getElementById('threads');
-                const noThreadsMessage = document.querySelector('.no-threads');
+      // Function to display posts
+      function displayPost(id, data) {
+        const postElement = document.createElement("div");
+        postElement.className = "post";
+        postElement.innerHTML = `
+          <div class="username">${data.username}</div>
+          <div class="post-content">${data.content}</div>
+          ${data.fileURL ? `<img src="${data.fileURL}" alt="User uploaded image">` : ""}
+          <div class="timestamp">${data.timestamp.toDate().toLocaleString()}</div>
+        `;
+        document.getElementById("posts").appendChild(postElement);
+      }
 
-                // Remove the "No threads yet" message if it exists
-                if (noThreadsMessage) {
-                    noThreadsMessage.style.display = 'none';
-                }
+      // Listen to form submission
+      document.getElementById("forum-post-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const username = document.getElementById("username").value;
+        const content = document.getElementById("postContent").value;
+        const file = document.getElementById("fileUpload").files[0];
+        await postMessage(username, content, file);
+        document.getElementById("forum-post-form").reset();
+      });
 
-                // Create new thread element
-                const newThread = document.createElement('div');
-                newThread.className = 'forum-thread';
-                newThread.innerHTML = `<h2>${title}</h2><p>${content}</p><small>Posted by: ${username}</small>`;
-
-                // If there is a file, create an image element
-                if (fileData) {
-                    const threadImage = document.createElement('img');
-                    threadImage.src = fileData;
-                    newThread.appendChild(threadImage);
-                }
-
-                // Add new thread to the forum
-                threadsContainer.appendChild(newThread);
-
-                // Save the new thread to localStorage
-                saveThread(username, title, content, fileData);
-
-                // Clear the input fields
-                document.getElementById('username').value = '';
-                document.getElementById('thread-title').value = '';
-                document.getElementById('thread-content').value = '';
-                document.getElementById('thread-file').value = '';
-            }
-        }
-
-        // Load threads when the page loads
-        window.onload = loadThreads;
+      // Real-time listener for new posts
+      const q = query(postsRef, orderBy("timestamp", "desc"));
+      onSnapshot(q, (querySnapshot) => {
+        document.getElementById("posts").innerHTML = ""; // Clear existing posts
+        querySnapshot.forEach((doc) => {
+          displayPost(doc.id, doc.data());
+        });
+      });
     </script>
 </body>
 </html>
